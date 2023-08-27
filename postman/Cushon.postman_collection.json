@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "63440695-55ba-49ec-aa8f-b8f880ae4c73",
+		"name": "Cushon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9761646"
+	},
+	"item": [
+		{
+			"name": "[GET] /api/retail-customer/{id}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cushon_api}}/api/retail-customer/{{retail_customer_id}}",
+					"host": [
+						"{{cushon_api}}"
+					],
+					"path": [
+						"api",
+						"retail-customer",
+						"{{retail_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[GET] /api//isas",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cushon_api_url}}/isas",
+					"host": [
+						"{{cushon_api_url}}"
+					],
+					"path": [
+						"isas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[POST] /api//investment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"retail_customer_id\": 1,\r\n    \"isa_id\": 2,\r\n    \"lump_sum\": 4000.02,\r\n    \"monthly_sum\": 0\r\n}"
+				},
+				"url": {
+					"raw": "{{cushon_api_url}}/investment",
+					"host": [
+						"{{cushon_api_url}}"
+					],
+					"path": [
+						"investment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[GET] /report/retail-customer-investments/{id}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cushon_report_url}}/retail-customer-investments/{{retail_customer_id}}",
+					"host": [
+						"{{cushon_report_url}}"
+					],
+					"path": [
+						"retail-customer-investments",
+						"{{retail_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

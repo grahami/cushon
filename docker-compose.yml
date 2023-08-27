@@ -1,0 +1,35 @@
+version: '3.5'
+services:
+  cushon:
+    image: cushon/phpbase
+    ports:
+      - "80:80"
+    external_links:
+      - mysql.cushon.org
+    build:
+      context: .
+    volumes:
+      - type: bind
+        source: .
+        target: /srv/cushon
+        consistency: cached
+    env_file:
+      - ./.Docker/.env-dev
+    networks:
+      cushon:
+        aliases:
+          - api.cushon.org
+
+  mysql:
+    ports:
+      - "3306:3306"
+    build:
+      context: /.Docker/mysql
+    networks:
+      cushon:
+        aliases:
+          - mysql.cushon.org
+
+networks:
+  cushon:
+    driver: bridge

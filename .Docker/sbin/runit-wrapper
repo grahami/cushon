@@ -1,0 +1,19 @@
+#!/bin/sh
+
+main() {
+    export > /env
+
+    trap onterm SIGTERM SIGINT
+
+    echo "Starting runit as service supervision"
+    /sbin/runsvdir-start &
+    wait "$!"
+}
+
+onterm() {
+  echo "Exiting runit"
+  pkill -SIGHUP runsvdir-start
+  exit $?
+}
+
+main "$@"
