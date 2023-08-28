@@ -37,7 +37,7 @@ class InvestmentService
             $this->throwException([ApiException::RETAIL_CUSTOMER_NOT_FOUND]);
         } catch (Throwable $exception) {
             // Log an unexpected exception
-            $this->throwException([ApiException::RETAIL_CUSTOMER_NOT_FOUND]);
+            $this->throwException([ApiException::GENERIC_ERROR_MESSAGE]);
         }
 
         $investmentResults = [];

@@ -15,7 +15,7 @@ abstract class AbstractIsa implements EntityInterface
     protected string $riskDetails = '';
     protected string $chargeDetails = '';
 
-    public static function create(
+    public function create(
         int    $id,
         string $name,
         string $type,
@@ -26,29 +26,21 @@ abstract class AbstractIsa implements EntityInterface
         switch ($type) {
             case 'ISA':
                 $isa = new Isa();
-                $isa->setId($id);
-                $isa->setName($name);
-                $isa->setRiskDetails($riskDetails);
-                $isa->setChargeDetails($chargeDetails);
                 break;
             case 'JISA':
                 $isa = new Jisa();
-                $isa->setId($id);
-                $isa->setName($name);
-                $isa->setRiskDetails($riskDetails);
-                $isa->setChargeDetails($chargeDetails);
                 break;
             case 'LISA':
                 $isa = new Lisa();
-                $isa->setId($id);
-                $isa->setName($name);
-                $isa->setRiskDetails($riskDetails);
-                $isa->setChargeDetails($chargeDetails);
                 break;
             default:
                 // Log that we have an unknown ISA type
                 throw new UnknownIsaTypeException();
         }
+        $isa->setId($id);
+        $isa->setName($name);
+        $isa->setRiskDetails($riskDetails);
+        $isa->setChargeDetails($chargeDetails);
 
         return $isa;
     }

@@ -7,7 +7,7 @@ The scope of the application is the backend RESTful API and there are no front e
 
 This approach was adopted so that the same solution could support both web, and native clients.
 
-The solution is a fairly limited implementation and makes a number of assumptions and has comments about improvements and enhancements that have been left out.
+The solution is a fairly limited implementation and makes a number of assumptions and has some initial comments in the code about improvements and enhancements that have been left out.
 
 ## Use of Docker
 Built on Docker with a docker-compose script to create two containers.
@@ -22,6 +22,12 @@ Represents a database server that is remote from the PHP code. This container cr
 
 ### Rest API container
 Runs the PHP code, based on Symfony that presents a RESTful API for the sample application.
+
+```
+cd / srv/cushon
+composer install
+```
+
 
 ## The RESTful API
 There are four routes (endpoints) in this solution. All accept and return data in JSON format. 
@@ -126,7 +132,7 @@ Result
 ```
 In the event that an invalid investment is requested, such as where the customer is not of an appropriate age, or the investment amount exceeds the Tax Free Allowance for the year, an appropriate element in the results array is returned.
 
-For a future, fuller implementation, this would allow some investments to succeed, and other to fail, as well as providing an array structure for an overall result to the investment request.
+For a future, fuller implementation, this would allow some investments to succeed, and other to fail, as well as providing an array structure for an overall outcome or summary of the investment request.
 ```
 {
     "data": [
@@ -171,21 +177,21 @@ Retrieves a JSON array of all of the investments that a retail customer currentl
 }
 ```
 ## Considerations and Notes 
-This solution does not make use of an ORM, but rather implements the Repository Pattern. This allows for SQL queries to have a comment as part of the query, which identify the source of the query and can be helpful for debugging, support and mainteainance.
+This solution does not make use of an ORM but rather implements the Repository Pattern. This allows for SQL queries to have a comment as part of the query, which identifies the source of the query and can be helpful for debugging, support and maintenance, when looking at the MySQL logs.
 
-The SQL queries currently make use of `SELECT *` but a proper implementation would probably be best to specify exactly the fields required.
+The SQL queries currently make use of `SELECT *` but in a proper implementation it would probably be best to specify exactly the list of fields required.
 
 The repository pattern allows for the Report endpoint to retrieve a retail customer's investment report, and return a JSON array with the results, in a single query and with no Entity instantiation.
 
 The requirement is for the retail customer functionality to be as separate from the employer based functionality as is reasonably possible. To support this, retail customers are stored in their own data repository and have they own, explicit classes and possibly even their own database.
 
-By contrast, it might make more sense for the ISA's to be available to both retail and employer based customers, so the application could be modified so the details of ISA's are retrieved from a different database. If this approach was adopted then the current solution would require changes for the reporting functionality, which currently makes use of an SQL query that contains JOIN's to retrieve the complete customer investment report with a single query.
+By contrast, it might make more sense for the ISA's to be available to both retail and employer based customers, so the application could be modified so the details of ISA's are retrieved from a different database. The list of ISA's is probably quite static, so this would also be a candidate for a cached result, such as from Redis. If the separation of ISA's to another database was adopted then the current solution would require changes for the reporting functionality, which currently makes use of an SQL query that contains JOIN's to retrieve the complete customer investment report with a single query.
 
 This sample application has some support for different types of ISA, e.g. normal ISA's, Junior ISA's and Lifetime ISA's, with appropriate validation for customer eligibility and checks for tax free allowances. 
 
-When creating an investment, the API accepts an array of investment requests, but currently has validation that only allows a single investment at one time. In future, this restriction could be removed, and more validation would be required to ensure that the sum of all investments of appropriate types does not exceed the customer's Tax Free Allowance for the year.
+When creating an investment, the API accepts an array of investment requests, but currently has validation that only allows a single investment at one time. This restriction could be removed and then more validation would be required to ensure that the sum of all investments of appropriate types does not exceed the customer's Tax Free Allowance for the year.
 
-There is also currently no handling for retrieving any existing investments a customer has for the current tax year, to avoid exceeding the tax free limit, or collection information from the customer about investments they may have with other providers.
+There is also currently no handling for retrieving any existing investments a customer has for the current tax year, when creating a new investment, so as to avoid exceeding the tax free limit. Nor is any information collected from the customer about investments they may have with other providers.
 
 For the report endpoint, there is currently no handling for pagination or filtering, such as by tax year.
 
@@ -195,8 +201,11 @@ There is currently no authorisation or authentication. In a full solution, there
 
 The structure to handle multiple investments at one time has been put in place, but the validation does not currently support this.
 
-Test coverage is currently very limited.
+Comments have been added to some places in the code to show where logging would be added for unexpected behaviour (Fault logging). In a fuller solution the dependency injection would be expanded so that a Logger was available in all classes which could be used for both Fault logging, and to instrument the "happy path" of normal execution of the system. This sort of instrumentation can be very useful for tuning performance, as well as for better understanding hotspots, or investigating issues, that do not manifest as a Fault, but also do not deliver the expected result.
 
+Test coverage is currently very limited and there are only unit tests. The addition of Integration and Application level tests would be an improvement.
+
+There is currently no CI/CD implementation. It would be very straight forward to create a docker-compose-ci.yaml file, to run static analysis and the test suite, as well as generating a code coverage report, which could then for the basis of a CI pipeline.
 
 
 ## Testing and validation

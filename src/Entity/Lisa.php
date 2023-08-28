@@ -14,7 +14,7 @@ class Lisa extends AbstractIsa
     public function isCustomerEligible(RetailCustomer $retailCustomer): bool
     {
         $age = $retailCustomer->getAge();
-        if ($age > 16) {
+        if ($age < 18) {
             return false;
         }
         return true;
